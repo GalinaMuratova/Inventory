@@ -1,6 +1,7 @@
 import express from 'express';
 import fileDbCategories from "../fileDbCategories";
 import {CategoryWithoutId} from "../types";
+import fileDbItems from "../fileDbItems";
 const categoryRouter = express.Router();
 
 categoryRouter.get('/', async (req, res) => {
@@ -35,12 +36,17 @@ categoryRouter.post('/', async (req, res)=> {
 categoryRouter.delete('/:id', async (req, res) => {
     const categories = await fileDbCategories.getItems();
     const category = categories.find(item => item.id === req.params.id);
+    const usedCategory = await fileDbItems.getItems();
+    const itemsWithSameCategory = usedCategory.find(item => item.categoryId === req.params.id);
 
+    if (itemsWithSameCategory) {
+        res.status(400).send({ "error": "This category is already in use. Can't be deleted" });
+        return;
+    }
     if (!category) {
         res.sendStatus(404);
         return;
     }
-
     await fileDbCategories.delete(req.params.id);
     res.send('Deleted');
 });

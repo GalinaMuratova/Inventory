@@ -1,7 +1,12 @@
 [
   {
-    "name": "Lalala",
-    "description": "111",
-    "id": "ccc7095d-7f33-44f4-bb6b-6157bc0c30d9"
+    "name": "Холл",
+    "description": "Шкав в самом углу",
+    "id": "2"
+  },
+  {
+    "name": "Кабинет врача",
+    "description": "Врач",
+    "id": "3"
   }
 ]

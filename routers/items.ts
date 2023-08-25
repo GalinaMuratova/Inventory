@@ -3,6 +3,7 @@ import fileDbItems from "../fileDbItems";
 import {imagesUpload} from "../multer";
 import {ItemWithoutId} from "../types";
 import fileDbCategories from "../fileDbCategories";
+import fileDbPlaces from "../fileDbPlaces";
 const itemsRouter = express.Router();
 
 itemsRouter.get('/', async (req, res) => {
@@ -29,6 +30,21 @@ itemsRouter.post('/', imagesUpload.single('image'), async (req, res) => {
     } else if (!req.body.placeId) {
         res.status(400).send({"error": "Field place id"})
     }
+
+    const usedCategory = await fileDbCategories.getItems();
+    const categoryExists = usedCategory.find(item => item.id === req.body.categoryId);
+    if (!categoryExists) {
+        res.status(400).send({ "error": "Category does not exist" });
+        return;
+    }
+
+    const usedPlace = await fileDbPlaces.getItems();
+    const placeExists = usedPlace.find(item => item.id === req.body.placeId);
+    if (!placeExists) {
+        res.status(400).send({ "error": "Place does not exist" });
+        return;
+    }
+
     const item: ItemWithoutId = {
         name: req.body.name,
         categoryId: req.body.categoryId,
