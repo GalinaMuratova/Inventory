@@ -1,2 +1,5 @@
 .idea
 /node_modules
+dbCategories.json
+dbItems.json
+dbPlaces.json
